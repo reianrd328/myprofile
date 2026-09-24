@@ -46,26 +46,20 @@
 
     // 3. About Section
     if (data.about) {
-      if (data.about.profileImage) {
-        var profileImg = document.querySelector('.about .row:first-of-type img');
-        if (profileImg) profileImg.src = data.about.profileImage;
-      }
-      if (data.about.techSkillsImage) {
-        var techImg = document.querySelector('.about .row:nth-of-type(2) img');
-        if (techImg) techImg.src = data.about.techSkillsImage;
-      }
-      if (data.about.bio) {
-        var bioP = document.querySelector('.about .row:first-of-type .col-md-6.col-lg-7 p');
-        if (bioP) bioP.textContent = data.about.bio;
-      }
-      if (data.about.heading) {
-        var headingH4 = document.querySelector('.about h4:first-of-type');
-        if (headingH4) headingH4.textContent = data.about.heading;
-      }
-      if (data.about.subText) {
-        var subP = document.querySelector('.about .row:nth-of-type(2) .col-md-6.col-lg-7 p');
-        if (subP) subP.innerHTML = data.about.subText.replace(/\n\n/g, '<br><br>');
-      }
+      var profileImg = document.getElementById('about-profile-img') || document.querySelector('.about .row:first-of-type img');
+      if (profileImg && data.about.profileImage) profileImg.src = data.about.profileImage;
+
+      var techImg = document.getElementById('about-tech-img') || document.querySelector('.about .row:nth-of-type(2) img');
+      if (techImg && data.about.techSkillsImage) techImg.src = data.about.techSkillsImage;
+
+      var bioP = document.getElementById('about-bio-text') || document.querySelector('.about .row:first-of-type .col-md-6.col-lg-7 p');
+      if (bioP && data.about.bio) bioP.textContent = data.about.bio;
+
+      var headingH4 = document.getElementById('about-heading-text') || document.querySelector('.about h4:first-of-type');
+      if (headingH4 && data.about.heading) headingH4.textContent = data.about.heading;
+
+      var subP = document.getElementById('about-subtext') || document.querySelector('.about .row:nth-of-type(2) .col-md-6.col-lg-7 p');
+      if (subP && data.about.subText) subP.innerHTML = data.about.subText.replace(/\n\n/g, '<br><br>');
     }
 
     // 4. Skills
