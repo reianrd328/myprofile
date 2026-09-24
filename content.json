@@ -1,0 +1,116 @@
+{
+  "sidebar": {
+    "brand": "Navigation",
+    "facebook": "https://www.facebook.com/richard.ong.969/",
+    "linkedin": "#",
+    "github": "https://github.com/reianrd328",
+    "instagram": ""
+  },
+  "hireMe": {
+    "email": "songzism@yahoo.com",
+    "cvLink": "https://drive.google.com/file/d/1BCkH1FjPcFGmACDWLTnBT_PfrE7hdY1E/view?usp=drive_link"
+  },
+  "about": {
+    "heading": "Professional, Standards Compliant Website Development & Design",
+    "bio": "Hello! I'm Richard, a freelance WordPress developer and designer based in the Philippines. I specialize in creating visually appealing and functional websites. I pride myself on doing things the right way, ensuring happy clients every time. Let's work together to bring your ideas to life!",
+    "subText": "After a website? I can take care of everything for you. From eye-catching design to make your website unique, to standards compliant code using the latest web technologies, to ensure your site looks beautiful in today's browsers.\n\nI can also sort out your domain name and web hosting, and provide a content management system to allow you to easily keep your website content up-to-date.",
+    "profileImage": "images/profile.png",
+    "techSkillsImage": "images/tech-skills.png"
+  },
+  "skills": [
+    { "name": "Design", "percent": 85 },
+    { "name": "SEO", "percent": 78 },
+    { "name": "Video Editing", "percent": 85 },
+    { "name": "Development", "percent": 88 },
+    { "name": "Virtual Assistant", "percent": 80 },
+    { "name": "Photo Editing", "percent": 86 }
+  ],
+  "services": [
+    {
+      "icon": "fa-paint-roller",
+      "title": "Web Design",
+      "description": "Crafting visually appealing and user-friendly websites using HTML, CSS, and JavaScript, with a strong focus on responsive design and seamless user experience."
+    },
+    {
+      "icon": "fa-laptop",
+      "title": "Web Development",
+      "description": "Developing robust and dynamic web applications using WordPress, MySQL, PHP, JavaScript, HTML, and CSS, ensuring functionality, performance, and scalability."
+    },
+    {
+      "icon": "fa-globe",
+      "title": "Domain Registration",
+      "description": "I offer quick and hassle-free domain registration services to help you secure the perfect web address for your business."
+    },
+    {
+      "icon": "fa-server",
+      "title": "Web Hosting",
+      "description": "I provide comprehensive web hosting setup and configuration services, ensuring your website is securely installed, optimized for performance, and ready to deliver a seamless user experience."
+    },
+    {
+      "icon": "fa-search",
+      "title": "SEO",
+      "description": "Enhancing website visibility and search engine rankings through keyword optimization, content strategy, and technical SEO best practices."
+    },
+    {
+      "icon": "fa-user-tie",
+      "title": "Virtual Assistant",
+      "description": "Providing efficient administrative support, managing tasks, scheduling, and assisting with projects remotely, ensuring smooth operations and client satisfaction."
+    }
+  ],
+  "portfolio": [
+    {
+      "title": "paunoonoo.art",
+      "category": "web-dev",
+      "categoryLabel": "Web Design",
+      "image": "images/portfolio/paunoonoo-res.png",
+      "url": "https://www.paunoonoo.art/"
+    },
+    {
+      "title": "johnnolandercomedy.com",
+      "category": "web-dev",
+      "categoryLabel": "Web Development",
+      "image": "images/portfolio/johnnolander-res.png",
+      "url": "https://www.johnnolandercomedy.com/"
+    },
+    {
+      "title": "erinstblaine.com",
+      "category": "web-dev",
+      "categoryLabel": "Web Development",
+      "image": "images/portfolio/erins-res.png",
+      "url": "http://erinstblaine.com/"
+    },
+    {
+      "title": "mrabrams.com",
+      "category": "web-dev",
+      "categoryLabel": "Web Development",
+      "image": "images/portfolio/mrabrams-res.png",
+      "url": "https://www.mrabrams.com/"
+    },
+    {
+      "title": "schoolofastonishment.com",
+      "category": "web-dev",
+      "categoryLabel": "Web Development",
+      "image": "images/portfolio/amazing-res.png",
+      "url": "https://schoolofastonishment.com/"
+    },
+    {
+      "title": "segalmagic.com",
+      "category": "web-dev",
+      "categoryLabel": "Web Development",
+      "image": "images/portfolio/nathaniel-res.png",
+      "url": "https://segalmagic.com/"
+    }
+  ],
+  "contact": {
+    "name": "Richard Ong",
+    "role": "Web Designer",
+    "email": "songzism@yahoo.com",
+    "phone": "+63 915 193 4601",
+    "location": "Philippines",
+    "facebook": "https://www.facebook.com/richard.ong.969/",
+    "linkedin": "#"
+  },
+  "footer": {
+    "copyright": "© Copyright Ribong. All Rights Reserved"
+  }
+}

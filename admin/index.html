@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portfolio Admin Dashboard - Cloud CMS</title>
+  <link rel="icon" href="../images/favicon.png">
+  <!-- Tailwind CSS & FontAwesome -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    .tab-btn.active {
+      background-color: #ef4444;
+      color: white;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #4b5563;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col antialiased">
+
+  <!-- Top Navigation Header -->
+  <header class="bg-slate-800 border-b border-slate-700 sticky top-0 z-50 px-4 py-3 shadow-md">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center space-x-3">
+        <span class="w-10 h-10 rounded-lg bg-red-600 text-white flex items-center justify-center font-bold text-xl shadow">
+          <i class="fa fa-sliders"></i>
+        </span>
+        <div>
+          <h1 class="font-bold text-lg leading-tight text-white">Portfolio Admin CMS</h1>
+          <p class="text-xs text-slate-400">Edit info, photos & sidebar from anywhere</p>
+        </div>
+      </div>
+
+      <!-- Action buttons -->
+      <div class="flex items-center space-x-3">
+        <a href="../index.html" target="_blank" class="px-3 py-2 text-xs md:text-sm rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-200 transition flex items-center gap-1.5">
+          <i class="fa fa-external-link-alt"></i>
+          <span>View Site</span>
+        </a>
+        <button id="saveBtn" class="px-4 py-2 text-xs md:text-sm font-semibold rounded-lg bg-red-600 hover:bg-red-500 text-white shadow-lg transition flex items-center gap-2">
+          <i class="fa fa-cloud-arrow-up"></i>
+          <span>Save &amp; Publish</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Status / Alert Banner -->
+  <div id="alertBanner" class="hidden max-w-7xl mx-auto mt-4 px-4 w-full">
+    <div id="alertContent" class="p-4 rounded-xl flex items-center justify-between text-sm shadow">
+      <div class="flex items-center space-x-2">
+        <i id="alertIcon" class="fa fa-info-circle text-lg"></i>
+        <span id="alertMsg">Message goes here</span>
+      </div>
+      <button onclick="document.getElementById('alertBanner').classList.add('hidden')" class="text-slate-400 hover:text-white">
+        <i class="fa fa-times"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Main Container -->
+  <main class="max-w-7xl mx-auto px-4 py-6 w-full flex-1 grid grid-cols-1 lg:grid-cols-4 gap-6">
+
+    <!-- Sidebar Navigation for Tabs -->
+    <aside class="lg:col-span-1 bg-slate-800/90 border border-slate-700/80 rounded-2xl p-4 h-fit sticky top-20 shadow-lg">
+      <!-- Cloud Connection Status Widget -->
+      <div class="mb-5 pb-5 border-b border-slate-700">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Cloud Status</span>
+          <span id="connBadge" class="text-xs font-medium px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-400 flex items-center gap-1">
+            <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span> Offline
+          </span>
+        </div>
+        <p id="connRepo" class="text-xs text-slate-300 font-mono truncate">reianrd328/myprofile</p>
+        <button id="openAuthModalBtn" class="mt-2.5 w-full text-xs py-1.5 px-2.5 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-200 transition flex items-center justify-center gap-1.5">
+          <i class="fa fa-key text-xs"></i>
+          <span>Configure Cloud Login</span>
+        </button>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <nav class="space-y-1.5" id="tabNav">
+        <button class="tab-btn active w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium transition flex items-center gap-3 text-slate-300 hover:bg-slate-700/50" data-tab="tab-sidebar">
+          <i class="fa fa-bars-staggered w-5 text-center"></i>
+          <span>Sidebar &amp; Social</span>
+        </button>
+        <button class="tab-btn w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium transition flex items-center gap-3 text-slate-300 hover:bg-slate-700/50" data-tab="tab-about">
+          <i class="fa fa-user w-5 text-center"></i>
+          <span>About &amp; Photos</span>
+        </button>
+        <button class="tab-btn w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium transition flex items-center gap-3 text-slate-300 hover:bg-slate-700/50" data-tab="tab-hireme">
+          <i class="fa fa-envelope-open-text w-5 text-center"></i>
+          <span>Hire Me &amp; CV Link</span>
+        </button>
+        <button class="tab-btn w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium transition flex items-center gap-3 text-slate-300 hover:bg-slate-700/50" data-tab="tab-skills">
+          <i class="fa fa-chart-simple w-5 text-center"></i>
+          <span>Skills &amp; Levels</span>
+        </button>
+        <button class="tab-btn w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium transition flex items-center gap-3 text-slate-300 hover:bg-slate-700/50" data-tab="tab-portfolio">
+          <i class="fa fa-layer-group w-5 text-center"></i>
+          <span>Portfolio Projects</span>
+        </button>
+        <button class="tab-btn w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium transition flex items-center gap-3 text-slate-300 hover:bg-slate-700/50" data-tab="tab-services">
+          <i class="fa fa-briefcase w-5 text-center"></i>
+          <span>Services</span>
+        </button>
+        <button class="tab-btn w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium transition flex items-center gap-3 text-slate-300 hover:bg-slate-700/50" data-tab="tab-contact">
+          <i class="fa fa-address-book w-5 text-center"></i>
+          <span>Contact &amp; Footer</span>
+        </button>
+      </nav>
+    </aside>
+
+    <!-- Tab Contents Section -->
+    <section class="lg:col-span-3 space-y-6">
+
+      <!-- ================= 1. SIDEBAR & SOCIAL ================= -->
+      <div id="tab-sidebar" class="tab-panel bg-slate-800/90 border border-slate-700/80 rounded-2xl p-6 shadow-xl space-y-6">
+        <div>
+          <h2 class="text-xl font-bold text-white flex items-center gap-2">
+            <i class="fa fa-bars-staggered text-red-500"></i> Sidebar &amp; Social Media
+          </h2>
+          <p class="text-sm text-slate-400 mt-1">Customize the sidebar brand text and social media profile icons.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div class="space-y-2">
+            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300">Sidebar Brand / Title</label>
+            <input type="text" id="sb_brand" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-red-500 transition" placeholder="Navigation or Your Name">
+            <p class="text-xs text-slate-400">Displayed at the top of the sidebar navigation menu.</p>
+          </div>
+
+          <div class="space-y-2">
+            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300">Facebook URL</label>
+            <div class="relative">
+              <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400"><i class="fab fa-facebook-f"></i></span>
+              <input type="url" id="sb_facebook" class="w-full bg-slate-900 border border-slate-700 rounded-xl pl-10 pr-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-red-500 transition" placeholder="https://facebook.com/yourprofile">
+            </div>
+          </div>
+
+          <div class="space-y-2">
+            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300">LinkedIn URL</label>
+            <div class="relative">
+              <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400"><i class="fab fa-linkedin-in"></i></span>
+              <input type="url" id="sb_linkedin" class="w-full bg-slate-900 border border-slate-700 rounded-xl pl-10 pr-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-red-500 transition" placeholder="https://linkedin.com/in/yourprofile">
+            </div>
+          </div>
+
+          <div class="space-y-2">
+            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300">GitHub URL</label>
+            <div class="relative">
+              <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400"><i class="fab fa-github"></i></span>
+              <input type="url" id="sb_github" class="w-full bg-slate-900 border border-slate-700 rounded-xl pl-10 pr-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-red-500 transition" placeholder="https://github.com/reianrd328">
+            </div>
+          </div>
+
+          <div class="space-y-2">
+            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300">Instagram URL (Optional)</label>
+            <div class="relative">
+              <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400"><i class="fab fa-instagram"></i></span>
+              <input type="url" id="sb_instagram" class="w-full bg-slate-900 border border-slate-700 rounded-xl pl-10 pr-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-red-500 transition" placeholder="https://instagram.com/yourprofile">
+            </div>
+          </div>
+        </div>
+
+        <!-- Sidebar Preview Card -->
+        <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-700/60 flex items-center justify-between">
+          <div class="flex items-center space-x-3">
+            <span class="w-3 h-3 rounded-full bg-green-500 inline-block"></span>
+            <span class="text-xs text-slate-300">Sidebar updates instantly on your live portfolio.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= 2. ABOUT & PHOTOS ================= -->
+      <div id="tab-about" class="tab-panel hidden bg-slate-800/90 border border-slate-700/80 rounded-2xl p-6 shadow-xl space-y-6">
+        <div>
+          <h2 class="text-xl font-bold text-white flex items-center gap-2">
+            <i class="fa fa-user text-red-500"></i> About &amp; Photos
+          </h2>
+          <p class="text-sm text-slate-400 mt-1">Change your profile photo, headings, and biography description.</p>
+        </div>
+
+        <!-- Photos Section -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 rounded-xl bg-slate-900/60 border border-slate-700/60">
+          <!-- Profile Photo -->
+          <div class="space-y-3">
+            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300">Profile Photo</label>
+            <div class="flex items-center space-x-4">
+              <img id="preview_profile" src="../images/profile.png" alt="Profile" class="w-24 h-24 rounded-xl object-cover border-2 border-slate-700 shadow">
+              <div class="space-y-2">
+                <input type="file" id="file_profile" accept="image/*" class="hidden">
+                <button type="button" onclick="document.getElementById('file_profile').click()" class="text-xs px-3 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg transition flex items-center gap-1.5">
+                  <i class="fa fa-camera"></i> Change Photo
+                </button>
+                <p class="text-[11px] text-slate-400">PNG, JPG or WEBP.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tech Skills Graphic -->
+          <div class="space-y-3">
+            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300">Tech Skills Graphic</label>
+            <div class="flex items-center space-x-4">
+              <img id="preview_tech" src="../images/tech-skills.png" alt="Tech Skills" class="w-24 h-24 rounded-xl object-cover border-2 border-slate-700 shadow">
+              <div class="space-y-2">
+                <input type="file" id="file_tech" accept="image/*" class="hidden">
+                <button type="button" onclick="document.getElementById('file_tech').click()" class="text-xs px-3 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg transition flex items-center gap-1.5">
+                  <i class="fa fa-image"></i> Change Graphic
+                </button>
+                <p class="text-[11px] text-slate-400">Skills badge image.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- About Text Info -->
+        <div class="space-y-4">
+          <div class="space-y-2">
+            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300">Short Bio (Introduction)</label>
+            <textarea id="about_bio" rows="4" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-red-500 transition" placeholder="Hello! I'm Richard..."></textarea>
+          </div>
+
+          <div class="space-y-2">
+            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300">Services Headline</label>
+            <input type="text" id="about_heading" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-red-500 transition" placeholder="Professional, Standards Compliant Website Development & Design">
+          </div>
+
+          <div class="space-y-2">
+            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300">Detailed Description</label>
+            <textarea id="about_subText" rows="4" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-red-500 transition" placeholder="After a website? I can take care of everything for you..."></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= 3. HIRE ME & CV LINK ================= -->
+      <div id="tab-hireme" class="tab-panel hidden bg-slate-800/90 border border-slate-700/80 rounded-2xl p-6 shadow-xl space-y-6">
+        <div>
+          <h2 class="text-xl font-bold text-white flex items-center gap-2">
+            <i class="fa fa-envelope-open-text text-red-500"></i> "Hire Me" Email &amp; CV Link
+          </h2>
+          <p class="text-sm text-slate-400 mt-1">Configure where the "Hire Me" button sends emails and the link to download your CV.</p>
+        </div>
+
+        <div class="space-y-5">
+          <div class="space-y-2">
+            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300">Hire Me Email Address</label>
+            <div class="relative">
+              <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400"><i class="fa fa-at"></i></span>
+              <input type="email" id="hire_email" class="w-full bg-slate-900 border border-slate-700 rounded-xl pl-10 pr-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-red-500 transition" placeholder="songzism@yahoo.com">
+            </div>
+            <p class="text-xs text-slate-400">When visitors click "Hire Me", this email address will be addressed automatically.</p>
+          </div>
+
+          <div class="space-y-2">
+            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300">CV Download Link (Google Drive / PDF URL)</label>
+            <div class="relative">
+              <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400"><i class="fa fa-file-pdf"></i></span>
+              <input type="url" id="hire_cvLink" class="w-full bg-slate-900 border border-slate-700 rounded-xl pl-10 pr-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-red-500 transition" placeholder="https://drive.google.com/file/d/...">
+            </div>
+            <p class="text-xs text-slate-400">Paste your public Google Drive or Dropbox link here.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= 4. SKILLS & LEVELS ================= -->
+      <div id="tab-skills" class="tab-panel hidden bg-slate-800/90 border border-slate-700/80 rounded-2xl p-6 shadow-xl space-y-6">
+        <div class="flex items-center justify-between">
+          <div>
+            <h2 class="text-xl font-bold text-white flex items-center gap-2">
+              <i class="fa fa-chart-simple text-red-500"></i> Skills &amp; Proficiencies
+            </h2>
+            <p class="text-sm text-slate-400 mt-1">Adjust your skill names and percentages displayed in the progress bars.</p>
+          </div>
+          <button id="addSkillBtn" class="text-xs px-3.5 py-2 bg-red-600/20 text-red-400 hover:bg-red-600 hover:text-white rounded-lg transition font-medium flex items-center gap-1.5">
+            <i class="fa fa-plus"></i> Add Skill
+          </button>
+        </div>
+
+        <div id="skillsContainer" class="space-y-4">
+          <!-- Dynamically populated skills -->
+        </div>
+      </div>
+
+      <!-- ================= 5. PORTFOLIO PROJECTS ================= -->
+      <div id="tab-portfolio" class="tab-panel hidden bg-slate-800/90 border border-slate-700/80 rounded-2xl p-6 shadow-xl space-y-6">
+        <div class="flex items-center justify-between">
+          <div>
+            <h2 class="text-xl font-bold text-white flex items-center gap-2">
+              <i class="fa fa-layer-group text-red-500"></i> Portfolio Projects
+            </h2>
+            <p class="text-sm text-slate-400 mt-1">Add, edit, or remove your showcase projects and upload screenshots.</p>
+          </div>
+          <button id="addProjectBtn" class="text-xs px-3.5 py-2 bg-red-600 hover:bg-red-500 text-white rounded-lg transition font-medium flex items-center gap-1.5 shadow">
+            <i class="fa fa-plus"></i> Add New Project
+          </button>
+        </div>
+
+        <div id="projectsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <!-- Dynamically populated projects -->
+        </div>
+      </div>
+
+      <!-- ================= 6. SERVICES ================= -->
+      <div id="tab-services" class="tab-panel hidden bg-slate-800/90 border border-slate-700/80 rounded-2xl p-6 shadow-xl space-y-6">
+        <div class="flex items-center justify-between">
+          <div>
+            <h2 class="text-xl font-bold text-white flex items-center gap-2">
+              <i class="fa fa-briefcase text-red-500"></i> Services
+            </h2>
+            <p class="text-sm text-slate-400 mt-1">Manage the services you offer to clients.</p>
+          </div>
+          <button id="addServiceBtn" class="text-xs px-3.5 py-2 bg-red-600/20 text-red-400 hover:bg-red-600 hover:text-white rounded-lg transition font-medium flex items-center gap-1.5">
+            <i class="fa fa-plus"></i> Add Service
+          </button>
+        </div>
+
+        <div id="servicesContainer" class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <!-- Dynamically populated services -->
+        </div>
+      </div>
+
+      <!-- ================= 7. CONTACT & FOOTER ================= -->
+      <div id="tab-contact" class="tab-panel hidden bg-slate-800/90 border border-slate-700/80 rounded-2xl p-6 shadow-xl space-y-6">
+        <div>
+          <h2 class="text-xl font-bold text-white flex items-center gap-2">
+            <i class="fa fa-address-book text-red-500"></i> Contact Info &amp; Footer
+          </h2>
+          <p class="text-sm text-slate-400 mt-1">Update your public contact information and copyright disclaimer.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div class="space-y-2">
+            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300">Full Name</label>
+            <input type="text" id="contact_name" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-red-500 transition" placeholder="Richard Ong">
+          </div>
+
+          <div class="space-y-2">
+            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300">Job Title / Role</label>
+            <input type="text" id="contact_role" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-red-500 transition" placeholder="Web Designer & Developer">
+          </div>
+
+          <div class="space-y-2">
+            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300">Email Address</label>
+            <input type="email" id="contact_email" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-red-500 transition" placeholder="songzism@yahoo.com">
+          </div>
+
+          <div class="space-y-2">
+            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300">Phone Number</label>
+            <input type="text" id="contact_phone" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-red-500 transition" placeholder="+63 915 193 4601">
+          </div>
+
+          <div class="space-y-2 md:col-span-2">
+            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300">Location</label>
+            <input type="text" id="contact_location" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-red-500 transition" placeholder="Philippines">
+          </div>
+
+          <div class="space-y-2 md:col-span-2">
+            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300">Footer Copyright Text</label>
+            <input type="text" id="footer_copyright" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-red-500 transition" placeholder="© Copyright Ribong. All Rights Reserved">
+          </div>
+        </div>
+      </div>
+
+    </section>
+  </main>
+
+  <!-- Cloud Login / GitHub Token Modal -->
+  <div id="authModal" class="hidden fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div class="bg-slate-800 border border-slate-700 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-5">
+      <div class="flex items-center justify-between">
+        <h3 class="font-bold text-lg text-white flex items-center gap-2">
+          <i class="fa fa-cloud text-red-500"></i> Cloud CMS Login
+        </h3>
+        <button id="closeAuthModalBtn" class="text-slate-400 hover:text-white">
+          <i class="fa fa-times"></i>
+        </button>
+      </div>
+
+      <p class="text-xs text-slate-300 leading-relaxed">
+        Connect to your GitHub repository (<span class="text-red-400 font-mono">reianrd328/myprofile</span>) so changes are saved and published automatically to your live website!
+      </p>
+
+      <div class="space-y-3">
+        <div class="space-y-1.5">
+          <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400">GitHub Personal Access Token</label>
+          <input type="password" id="ghTokenInput" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2 text-sm text-white focus:outline-none focus:border-red-500 font-mono" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
+        </div>
+
+        <div class="p-3 bg-slate-900/80 rounded-xl border border-slate-700/60 text-xs text-slate-400 space-y-1.5">
+          <p class="font-semibold text-slate-300 flex items-center gap-1.5">
+            <i class="fa fa-lightbulb text-amber-400"></i> How to get your Token in 1 minute:
+          </p>
+          <ol class="list-decimal pl-4 space-y-1">
+            <li>Visit <a href="https://github.com/settings/tokens/new" target="_blank" class="text-red-400 underline">GitHub Token Settings</a>.</li>
+            <li>Give it a note (e.g. <em>"Portfolio CMS"</em>).</li>
+            <li>Check the <strong class="text-slate-200">repo</strong> scope checkbox.</li>
+            <li>Click <em>Generate token</em> at the bottom, copy and paste it here!</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-end space-x-3 pt-2">
+        <button id="saveTokenBtn" class="w-full py-2.5 bg-red-600 hover:bg-red-500 text-white rounded-xl text-sm font-semibold transition shadow">
+          Connect &amp; Remember Login
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading Overlay -->
+  <div id="loadingOverlay" class="hidden fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-50 flex flex-col items-center justify-center p-4">
+    <div class="w-12 h-12 border-4 border-red-500 border-t-transparent rounded-full animate-spin mb-4"></div>
+    <p id="loadingText" class="text-sm font-medium text-white">Saving changes to GitHub...</p>
+    <p class="text-xs text-slate-400 mt-1">Please keep this window open</p>
+  </div>
+
+  <!-- Admin Controller Script -->
+  <script>
+    (function () {
+      'use strict';
+
+      const REPO_OWNER = 'reianrd328';
+      const REPO_NAME = 'myprofile';
+      const BRANCH = 'main';
+
+      let currentData = null;
+      let contentSha = null;
+      const uploadedFiles = {}; // { 'images/profile.png': base64 }
+
+      // DOM Elements
+      const tabBtns = document.querySelectorAll('.tab-btn');
+      const tabPanels = document.querySelectorAll('.tab-panel');
+      const saveBtn = document.getElementById('saveBtn');
+      const alertBanner = document.getElementById('alertBanner');
+      const alertContent = document.getElementById('alertContent');
+      const alertIcon = document.getElementById('alertIcon');
+      const alertMsg = document.getElementById('alertMsg');
+      const authModal = document.getElementById('authModal');
+      const openAuthModalBtn = document.getElementById('openAuthModalBtn');
+      const closeAuthModalBtn = document.getElementById('closeAuthModalBtn');
+      const saveTokenBtn = document.getElementById('saveTokenBtn');
+      const ghTokenInput = document.getElementById('ghTokenInput');
+      const connBadge = document.getElementById('connBadge');
+      const loadingOverlay = document.getElementById('loadingOverlay');
+      const loadingText = document.getElementById('loadingText');
+
+      // --- Tab Switching ---
+      tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          tabBtns.forEach(b => b.classList.remove('active'));
+          tabPanels.forEach(p => p.classList.add('hidden'));
+
+          btn.classList.add('active');
+          const targetId = btn.getAttribute('data-tab');
+          const targetPanel = document.getElementById(targetId);
+          if (targetPanel) targetPanel.classList.remove('hidden');
+        });
+      });
+
+      // --- Alerts ---
+      function showAlert(type, message) {
+        alertBanner.classList.remove('hidden');
+        if (type === 'success') {
+          alertContent.className = 'p-4 rounded-xl flex items-center justify-between text-sm shadow bg-emerald-500/20 border border-emerald-500/30 text-emerald-300';
+          alertIcon.className = 'fa fa-circle-check text-emerald-400 text-lg';
+        } else if (type === 'error') {
+          alertContent.className = 'p-4 rounded-xl flex items-center justify-between text-sm shadow bg-red-500/20 border border-red-500/30 text-red-300';
+          alertIcon.className = 'fa fa-triangle-exclamation text-red-400 text-lg';
+        } else {
+          alertContent.className = 'p-4 rounded-xl flex items-center justify-between text-sm shadow bg-blue-500/20 border border-blue-500/30 text-blue-300';
+          alertIcon.className = 'fa fa-circle-info text-blue-400 text-lg';
+        }
+        alertMsg.textContent = message;
+      }
+
+      // --- Auth Management ---
+      function getToken() {
+        return localStorage.getItem('portfolio_gh_token') || '';
+      }
+
+      function updateConnBadge() {
+        const token = getToken();
+        if (token) {
+          connBadge.className = 'text-xs font-medium px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center gap-1';
+          connBadge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Connected';
+          ghTokenInput.value = token;
+        } else {
+          connBadge.className = 'text-xs font-medium px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-400 flex items-center gap-1';
+          connBadge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span> Not Connected';
+        }
+      }
+
+      openAuthModalBtn.addEventListener('click', () => authModal.classList.remove('hidden'));
+      closeAuthModalBtn.addEventListener('click', () => authModal.classList.add('hidden'));
+      saveTokenBtn.addEventListener('click', () => {
+        const val = ghTokenInput.value.trim();
+        if (val) {
+          localStorage.setItem('portfolio_gh_token', val);
+          showAlert('success', 'Cloud Token saved! You can now publish changes directly to your live site.');
+        } else {
+          localStorage.removeItem('portfolio_gh_token');
+          showAlert('info', 'Token removed.');
+        }
+        updateConnBadge();
+        authModal.classList.add('hidden');
+      });
+
+      // --- File Upload Helpers ---
+      function setupImageUpload(fileInputId, previewImgId, targetPath) {
+        const fileInput = document.getElementById(fileInputId);
+        const previewImg = document.getElementById(previewImgId);
+
+        fileInput.addEventListener('change', function () {
+          const file = fileInput.files[0];
+          if (!file) return;
+
+          const reader = new FileReader();
+          reader.onload = function (e) {
+            previewImg.src = e.target.result;
+            // Store base64 without prefix for GitHub API
+            const base64Data = e.target.result.split(',')[1];
+            uploadedFiles[targetPath] = base64Data;
+            showAlert('info', `Photo prepared: ${file.name}. Click 'Save & Publish' to upload to GitHub.`);
+          };
+          reader.readAsDataURL(file);
+        });
+      }
+
+      setupImageUpload('file_profile', 'preview_profile', 'images/profile.png');
+      setupImageUpload('file_tech', 'preview_tech', 'images/tech-skills.png');
+
+      // --- Load Content (From GitHub or Local content.json) ---
+      async function loadInitialData() {
+        const token = getToken();
+        updateConnBadge();
+
+        try {
+          // If token available, fetch latest from GitHub API to get the latest SHA
+          if (token) {
+            const resp = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/content.json?ref=${BRANCH}`, {
+              headers: {
+                'Authorization': `Bearer ${token}`,
+                'Accept': 'application/vnd.github.v3+json'
+              }
+            });
+
+            if (resp.ok) {
+              const fileData = await resp.json();
+              contentSha = fileData.sha;
+              // Decode base64 UTF-8 content
+              const rawJson = decodeURIComponent(escape(atob(fileData.content)));
+              currentData = JSON.parse(rawJson);
+              populateForm(currentData);
+              return;
+            }
+          }
+
+          // Fallback to local content.json
+          const localResp = await fetch('../content.json?v=' + Date.now());
+          if (localResp.ok) {
+            currentData = await localResp.json();
+            populateForm(currentData);
+          } else {
+            throw new Error('Unable to fetch content.json');
+          }
+        } catch (err) {
+          console.error(err);
+          showAlert('error', 'Error loading content: ' + err.message);
+        }
+      }
+
+      // --- Populate Form ---
+      function populateForm(data) {
+        if (!data) return;
+
+        // 1. Sidebar
+        if (data.sidebar) {
+          document.getElementById('sb_brand').value = data.sidebar.brand || '';
+          document.getElementById('sb_facebook').value = data.sidebar.facebook || '';
+          document.getElementById('sb_linkedin').value = data.sidebar.linkedin || '';
+          document.getElementById('sb_github').value = data.sidebar.github || '';
+          document.getElementById('sb_instagram').value = data.sidebar.instagram || '';
+        }
+
+        // 2. About
+        if (data.about) {
+          document.getElementById('about_bio').value = data.about.bio || '';
+          document.getElementById('about_heading').value = data.about.heading || '';
+          document.getElementById('about_subText').value = data.about.subText || '';
+          if (data.about.profileImage) document.getElementById('preview_profile').src = '../' + data.about.profileImage;
+          if (data.about.techSkillsImage) document.getElementById('preview_tech').src = '../' + data.about.techSkillsImage;
+        }
+
+        // 3. Hire Me
+        if (data.hireMe) {
+          document.getElementById('hire_email').value = data.hireMe.email || '';
+          document.getElementById('hire_cvLink').value = data.hireMe.cvLink || '';
+        }
+
+        // 4. Skills
+        renderSkills(data.skills || []);
+
+        // 5. Portfolio
+        renderPortfolio(data.portfolio || []);
+
+        // 6. Services
+        renderServices(data.services || []);
+
+        // 7. Contact
+        if (data.contact) {
+          document.getElementById('contact_name').value = data.contact.name || '';
+          document.getElementById('contact_role').value = data.contact.role || '';
+          document.getElementById('contact_email').value = data.contact.email || '';
+          document.getElementById('contact_phone').value = data.contact.phone || '';
+          document.getElementById('contact_location').value = data.contact.location || '';
+        }
+
+        // 8. Footer
+        if (data.footer) {
+          document.getElementById('footer_copyright').value = data.footer.copyright || '';
+        }
+      }
+
+      // --- Render Skills ---
+      function renderSkills(skills) {
+        const container = document.getElementById('skillsContainer');
+        container.innerHTML = '';
+
+        skills.forEach((skill, idx) => {
+          const row = document.createElement('div');
+          row.className = 'flex flex-wrap items-center gap-3 p-3 bg-slate-900/60 border border-slate-700/60 rounded-xl';
+          row.innerHTML = `
+            <div class="flex-1 min-w-[140px]">
+              <input type="text" value="${skill.name}" class="skill-name-input w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-1.5 text-sm text-white focus:outline-none focus:border-red-500" placeholder="Skill Name">
+            </div>
+            <div class="flex items-center gap-3 flex-1 min-w-[180px]">
+              <input type="range" min="0" max="100" value="${skill.percent}" class="skill-range-input flex-1 accent-red-500">
+              <span class="skill-percent-label w-12 text-right text-xs font-mono text-red-400 font-semibold">${skill.percent}%</span>
+            </div>
+            <button type="button" class="remove-skill-btn text-slate-400 hover:text-red-400 p-2 transition">
+              <i class="fa fa-trash-can"></i>
+            </button>
+          `;
+
+          const range = row.querySelector('.skill-range-input');
+          const label = row.querySelector('.skill-percent-label');
+          range.addEventListener('input', () => {
+            label.textContent = range.value + '%';
+          });
+
+          row.querySelector('.remove-skill-btn').addEventListener('click', () => {
+            row.remove();
+          });
+
+          container.appendChild(row);
+        });
+      }
+
+      document.getElementById('addSkillBtn').addEventListener('click', () => {
+        const container = document.getElementById('skillsContainer');
+        const row = document.createElement('div');
+        row.className = 'flex flex-wrap items-center gap-3 p-3 bg-slate-900/60 border border-slate-700/60 rounded-xl';
+        row.innerHTML = `
+          <div class="flex-1 min-w-[140px]">
+            <input type="text" value="New Skill" class="skill-name-input w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-1.5 text-sm text-white focus:outline-none focus:border-red-500">
+          </div>
+          <div class="flex items-center gap-3 flex-1 min-w-[180px]">
+            <input type="range" min="0" max="100" value="80" class="skill-range-input flex-1 accent-red-500">
+            <span class="skill-percent-label w-12 text-right text-xs font-mono text-red-400 font-semibold">80%</span>
+          </div>
+          <button type="button" class="remove-skill-btn text-slate-400 hover:text-red-400 p-2 transition">
+            <i class="fa fa-trash-can"></i>
+          </button>
+        `;
+        const range = row.querySelector('.skill-range-input');
+        const label = row.querySelector('.skill-percent-label');
+        range.addEventListener('input', () => { label.textContent = range.value + '%'; });
+        row.querySelector('.remove-skill-btn').addEventListener('click', () => row.remove());
+        container.appendChild(row);
+      });
+
+      // --- Render Portfolio ---
+      function renderPortfolio(items) {
+        const container = document.getElementById('projectsContainer');
+        container.innerHTML = '';
+
+        items.forEach((item, idx) => {
+          const card = document.createElement('div');
+          card.className = 'project-card bg-slate-900/70 border border-slate-700/70 rounded-xl p-4 space-y-3 relative shadow';
+          card.innerHTML = `
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Project #${idx + 1}</span>
+              <button type="button" class="remove-proj-btn text-xs text-red-400 hover:text-red-300 flex items-center gap-1">
+                <i class="fa fa-trash"></i> Remove
+              </button>
+            </div>
+            <div class="flex items-center space-x-3">
+              <img src="../${item.image}" alt="${item.title}" class="proj-preview w-20 h-16 object-cover rounded-lg border border-slate-700 shadow">
+              <div class="flex-1 space-y-1">
+                <input type="file" accept="image/*" class="proj-file-input hidden" id="proj_file_${idx}">
+                <button type="button" onclick="document.getElementById('proj_file_${idx}').click()" class="text-xs px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded border border-slate-700 transition">
+                  <i class="fa fa-upload text-[10px]"></i> Change Screenshot
+                </button>
+                <input type="hidden" class="proj-image-path" value="${item.image}">
+              </div>
+            </div>
+            <div class="space-y-1.5">
+              <label class="text-[11px] font-semibold text-slate-300">Project Title</label>
+              <input type="text" value="${item.title}" class="proj-title w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-red-500">
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+              <div class="space-y-1">
+                <label class="text-[11px] font-semibold text-slate-300">Category Tag</label>
+                <select class="proj-category w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-red-500">
+                  <option value="web-dev" ${item.category === 'web-dev' ? 'selected' : ''}>Development</option>
+                  <option value="web-des" ${item.category === 'web-des' ? 'selected' : ''}>Design</option>
+                </select>
+              </div>
+              <div class="space-y-1">
+                <label class="text-[11px] font-semibold text-slate-300">Category Label</label>
+                <input type="text" value="${item.categoryLabel || 'Web Development'}" class="proj-label w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-red-500">
+              </div>
+            </div>
+            <div class="space-y-1">
+              <label class="text-[11px] font-semibold text-slate-300">Live Website URL</label>
+              <input type="url" value="${item.url || ''}" class="proj-url w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-red-500" placeholder="https://example.com">
+            </div>
+          `;
+
+          // Handle project screenshot upload
+          const fileInput = card.querySelector('.proj-file-input');
+          const previewImg = card.querySelector('.proj-preview');
+          const pathHidden = card.querySelector('.proj-image-path');
+
+          fileInput.addEventListener('change', () => {
+            const file = fileInput.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+              previewImg.src = e.target.result;
+              const sanitizedName = file.name.toLowerCase().replace(/[^a-z0-9.]/g, '-');
+              const targetPath = `images/portfolio/${sanitizedName}`;
+              pathHidden.value = targetPath;
+              uploadedFiles[targetPath] = e.target.result.split(',')[1];
+              showAlert('info', `Project screenshot ready: ${file.name}`);
+            };
+            reader.readAsDataURL(file);
+          });
+
+          card.querySelector('.remove-proj-btn').addEventListener('click', () => card.remove());
+          container.appendChild(card);
+        });
+      }
+
+      document.getElementById('addProjectBtn').addEventListener('click', () => {
+        const container = document.getElementById('projectsContainer');
+        const idx = container.children.length;
+        const card = document.createElement('div');
+        card.className = 'project-card bg-slate-900/70 border border-slate-700/70 rounded-xl p-4 space-y-3 relative shadow';
+        card.innerHTML = `
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Project #${idx + 1}</span>
+            <button type="button" class="remove-proj-btn text-xs text-red-400 hover:text-red-300 flex items-center gap-1">
+              <i class="fa fa-trash"></i> Remove
+            </button>
+          </div>
+          <div class="flex items-center space-x-3">
+            <img src="../images/profile.png" alt="New Project" class="proj-preview w-20 h-16 object-cover rounded-lg border border-slate-700 shadow">
+            <div class="flex-1 space-y-1">
+              <input type="file" accept="image/*" class="proj-file-input hidden" id="proj_file_new_${idx}">
+              <button type="button" onclick="document.getElementById('proj_file_new_${idx}').click()" class="text-xs px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded border border-slate-700 transition">
+                <i class="fa fa-upload text-[10px]"></i> Choose Screenshot
+              </button>
+              <input type="hidden" class="proj-image-path" value="images/portfolio/sample.png">
+            </div>
+          </div>
+          <div class="space-y-1.5">
+            <label class="text-[11px] font-semibold text-slate-300">Project Title</label>
+            <input type="text" value="New Project Website" class="proj-title w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-red-500">
+          </div>
+          <div class="grid grid-cols-2 gap-2">
+            <div class="space-y-1">
+              <label class="text-[11px] font-semibold text-slate-300">Category Tag</label>
+              <select class="proj-category w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-red-500">
+                <option value="web-dev" selected>Development</option>
+                <option value="web-des">Design</option>
+              </select>
+            </div>
+            <div class="space-y-1">
+              <label class="text-[11px] font-semibold text-slate-300">Category Label</label>
+              <input type="text" value="Web Development" class="proj-label w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-red-500">
+            </div>
+          </div>
+          <div class="space-y-1">
+            <label class="text-[11px] font-semibold text-slate-300">Live Website URL</label>
+            <input type="url" value="https://" class="proj-url w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-red-500">
+          </div>
+        `;
+
+        const fileInput = card.querySelector('.proj-file-input');
+        const previewImg = card.querySelector('.proj-preview');
+        const pathHidden = card.querySelector('.proj-image-path');
+
+        fileInput.addEventListener('change', () => {
+          const file = fileInput.files[0];
+          if (!file) return;
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            previewImg.src = e.target.result;
+            const sanitizedName = file.name.toLowerCase().replace(/[^a-z0-9.]/g, '-');
+            const targetPath = `images/portfolio/${sanitizedName}`;
+            pathHidden.value = targetPath;
+            uploadedFiles[targetPath] = e.target.result.split(',')[1];
+            showAlert('info', `Project screenshot ready: ${file.name}`);
+          };
+          reader.readAsDataURL(file);
+        });
+
+        card.querySelector('.remove-proj-btn').addEventListener('click', () => card.remove());
+        container.appendChild(card);
+      });
+
+      // --- Render Services ---
+      function renderServices(services) {
+        const container = document.getElementById('servicesContainer');
+        container.innerHTML = '';
+
+        services.forEach((srv, idx) => {
+          const card = document.createElement('div');
+          card.className = 'service-card bg-slate-900/70 border border-slate-700/70 rounded-xl p-4 space-y-3 relative shadow';
+          card.innerHTML = `
+            <div class="flex items-center justify-between">
+              <div class="flex items-center space-x-2">
+                <i class="fa ${srv.icon || 'fa-briefcase'} text-red-500 text-sm"></i>
+                <input type="text" value="${srv.icon || 'fa-briefcase'}" class="srv-icon w-28 bg-slate-800 border border-slate-700 rounded px-2 py-0.5 text-xs text-white font-mono" placeholder="fa-icon">
+              </div>
+              <button type="button" class="remove-srv-btn text-xs text-red-400 hover:text-red-300">
+                <i class="fa fa-trash"></i>
+              </button>
+            </div>
+            <div>
+              <label class="text-[11px] font-semibold text-slate-300">Service Title</label>
+              <input type="text" value="${srv.title}" class="srv-title w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-red-500">
+            </div>
+            <div>
+              <label class="text-[11px] font-semibold text-slate-300">Description</label>
+              <textarea class="srv-desc w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-red-500" rows="3">${srv.description}</textarea>
+            </div>
+          `;
+          card.querySelector('.remove-srv-btn').addEventListener('click', () => card.remove());
+          container.appendChild(card);
+        });
+      }
+
+      document.getElementById('addServiceBtn').addEventListener('click', () => {
+        const container = document.getElementById('servicesContainer');
+        const card = document.createElement('div');
+        card.className = 'service-card bg-slate-900/70 border border-slate-700/70 rounded-xl p-4 space-y-3 relative shadow';
+        card.innerHTML = `
+          <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+              <i class="fa fa-star text-red-500 text-sm"></i>
+              <input type="text" value="fa-star" class="srv-icon w-28 bg-slate-800 border border-slate-700 rounded px-2 py-0.5 text-xs text-white font-mono">
+            </div>
+            <button type="button" class="remove-srv-btn text-xs text-red-400 hover:text-red-300">
+              <i class="fa fa-trash"></i>
+            </button>
+          </div>
+          <div>
+            <label class="text-[11px] font-semibold text-slate-300">Service Title</label>
+            <input type="text" value="New Service" class="srv-title w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-red-500">
+          </div>
+          <div>
+            <label class="text-[11px] font-semibold text-slate-300">Description</label>
+            <textarea class="srv-desc w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-red-500" rows="3" placeholder="Describe your service here..."></textarea>
+          </div>
+        `;
+        card.querySelector('.remove-srv-btn').addEventListener('click', () => card.remove());
+        container.appendChild(card);
+      });
+
+      // --- Collect Current Form Data ---
+      function collectFormData() {
+        const data = {
+          sidebar: {
+            brand: document.getElementById('sb_brand').value.trim(),
+            facebook: document.getElementById('sb_facebook').value.trim(),
+            linkedin: document.getElementById('sb_linkedin').value.trim(),
+            github: document.getElementById('sb_github').value.trim(),
+            instagram: document.getElementById('sb_instagram').value.trim()
+          },
+          hireMe: {
+            email: document.getElementById('hire_email').value.trim(),
+            cvLink: document.getElementById('hire_cvLink').value.trim()
+          },
+          about: {
+            heading: document.getElementById('about_heading').value.trim(),
+            bio: document.getElementById('about_bio').value.trim(),
+            subText: document.getElementById('about_subText').value.trim(),
+            profileImage: currentData && currentData.about && currentData.about.profileImage ? currentData.about.profileImage : 'images/profile.png',
+            techSkillsImage: currentData && currentData.about && currentData.about.techSkillsImage ? currentData.about.techSkillsImage : 'images/tech-skills.png'
+          },
+          skills: [],
+          portfolio: [],
+          services: [],
+          contact: {
+            name: document.getElementById('contact_name').value.trim(),
+            role: document.getElementById('contact_role').value.trim(),
+            email: document.getElementById('contact_email').value.trim(),
+            phone: document.getElementById('contact_phone').value.trim(),
+            location: document.getElementById('contact_location').value.trim(),
+            facebook: document.getElementById('sb_facebook').value.trim(),
+            linkedin: document.getElementById('sb_linkedin').value.trim()
+          },
+          footer: {
+            copyright: document.getElementById('footer_copyright').value.trim()
+          }
+        };
+
+        // Skills
+        document.querySelectorAll('#skillsContainer > div').forEach(row => {
+          const name = row.querySelector('.skill-name-input').value.trim();
+          const percent = parseInt(row.querySelector('.skill-range-input').value, 10) || 0;
+          if (name) data.skills.push({ name, percent });
+        });
+
+        // Portfolio
+        document.querySelectorAll('#projectsContainer .project-card').forEach(card => {
+          const title = card.querySelector('.proj-title').value.trim();
+          const category = card.querySelector('.proj-category').value;
+          const categoryLabel = card.querySelector('.proj-label').value.trim();
+          const image = card.querySelector('.proj-image-path').value.trim();
+          const url = card.querySelector('.proj-url').value.trim();
+          if (title) data.portfolio.push({ title, category, categoryLabel, image, url });
+        });
+
+        // Services
+        document.querySelectorAll('#servicesContainer .service-card').forEach(card => {
+          const icon = card.querySelector('.srv-icon').value.trim();
+          const title = card.querySelector('.srv-title').value.trim();
+          const description = card.querySelector('.srv-desc').value.trim();
+          if (title) data.services.push({ icon, title, description });
+        });
+
+        return data;
+      }
+
+      // --- Save & Publish to GitHub ---
+      saveBtn.addEventListener('click', async () => {
+        const token = getToken();
+
+        if (!token) {
+          authModal.classList.remove('hidden');
+          showAlert('error', 'Please configure your GitHub Token first to publish online.');
+          return;
+        }
+
+        const dataToSave = collectFormData();
+        loadingOverlay.classList.remove('hidden');
+
+        try {
+          // Step 1: Upload any newly selected images first
+          for (const [filePath, base64Content] of Object.entries(uploadedFiles)) {
+            loadingText.textContent = `Uploading ${filePath}...`;
+
+            // Check if file exists to get SHA
+            let fileSha = null;
+            try {
+              const checkResp = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${filePath}?ref=${BRANCH}`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+              });
+              if (checkResp.ok) {
+                const info = await checkResp.json();
+                fileSha = info.sha;
+              }
+            } catch (e) {}
+
+            // Put file
+            const putBody = {
+              message: `Update image: ${filePath}`,
+              content: base64Content,
+              branch: BRANCH
+            };
+            if (fileSha) putBody.sha = fileSha;
+
+            const putResp = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${filePath}`, {
+              method: 'PUT',
+              headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(putBody)
+            });
+
+            if (!putResp.ok) {
+              const errData = await putResp.json();
+              throw new Error(`Failed to upload ${filePath}: ${errData.message}`);
+            }
+          }
+
+          // Step 2: Fetch latest content.json SHA if not known
+          loadingText.textContent = 'Updating content.json on GitHub...';
+          const jsonResp = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/content.json?ref=${BRANCH}`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+          });
+          if (jsonResp.ok) {
+            const currentFileData = await jsonResp.json();
+            contentSha = currentFileData.sha;
+          }
+
+          // Step 3: Commit content.json to GitHub
+          const jsonString = JSON.stringify(dataToSave, null, 2);
+          const encodedContent = btoa(unescape(encodeURIComponent(jsonString)));
+
+          const commitBody = {
+            message: 'Update portfolio content via Cloud CMS',
+            content: encodedContent,
+            branch: BRANCH
+          };
+          if (contentSha) commitBody.sha = contentSha;
+
+          const commitResp = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/content.json`, {
+            method: 'PUT',
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(commitBody)
+          });
+
+          if (!commitResp.ok) {
+            const errData = await commitResp.json();
+            throw new Error(errData.message || 'Failed to save content.json to GitHub');
+          }
+
+          const resultData = await commitResp.json();
+          contentSha = resultData.content.sha;
+          currentData = dataToSave;
+
+          // Clear uploaded images queue
+          for (const key in uploadedFiles) delete uploadedFiles[key];
+
+          loadingOverlay.classList.add('hidden');
+          showAlert('success', '🎉 Successfully saved and published! GitHub Pages will update your live site in 1-2 minutes.');
+        } catch (err) {
+          loadingOverlay.classList.add('hidden');
+          console.error(err);
+          showAlert('error', 'Save failed: ' + err.message);
+        }
+      });
+
+      // Initialize
+      loadInitialData();
+    })();
+  </script>
+</body>
+</html>
