@@ -18,43 +18,29 @@
     "techSkillsImage": "images/tech-skills.png"
   },
   "skills": [
-    { "name": "Design", "percent": 85 },
-    { "name": "SEO", "percent": 78 },
-    { "name": "Video Editing", "percent": 85 },
-    { "name": "Development", "percent": 88 },
-    { "name": "Virtual Assistant", "percent": 80 },
-    { "name": "Photo Editing", "percent": 86 }
-  ],
-  "services": [
     {
-      "icon": "fa-paint-roller",
-      "title": "Web Design",
-      "description": "Crafting visually appealing and user-friendly websites using HTML, CSS, and JavaScript, with a strong focus on responsive design and seamless user experience."
+      "name": "Design",
+      "percent": 85
     },
     {
-      "icon": "fa-laptop",
-      "title": "Web Development",
-      "description": "Developing robust and dynamic web applications using WordPress, MySQL, PHP, JavaScript, HTML, and CSS, ensuring functionality, performance, and scalability."
+      "name": "SEO",
+      "percent": 78
     },
     {
-      "icon": "fa-globe",
-      "title": "Domain Registration",
-      "description": "I offer quick and hassle-free domain registration services to help you secure the perfect web address for your business."
+      "name": "Video Editing",
+      "percent": 85
     },
     {
-      "icon": "fa-server",
-      "title": "Web Hosting",
-      "description": "I provide comprehensive web hosting setup and configuration services, ensuring your website is securely installed, optimized for performance, and ready to deliver a seamless user experience."
+      "name": "Development",
+      "percent": 88
     },
     {
-      "icon": "fa-search",
-      "title": "SEO",
-      "description": "Enhancing website visibility and search engine rankings through keyword optimization, content strategy, and technical SEO best practices."
+      "name": "Virtual Assistant",
+      "percent": 80
     },
     {
-      "icon": "fa-user-tie",
-      "title": "Virtual Assistant",
-      "description": "Providing efficient administrative support, managing tasks, scheduling, and assisting with projects remotely, ensuring smooth operations and client satisfaction."
+      "name": "Photo Editing",
+      "percent": 86
     }
   ],
   "portfolio": [
@@ -99,6 +85,45 @@
       "categoryLabel": "Web Development",
       "image": "images/portfolio/nathaniel-res.png",
       "url": "https://segalmagic.com/"
+    },
+    {
+      "title": "Hardware Log Deployment",
+      "category": "web-dev",
+      "categoryLabel": "Web Development",
+      "image": "images/portfolio/invetory.png",
+      "url": "https://technical-preventive-hub.onrender.com/"
+    }
+  ],
+  "services": [
+    {
+      "icon": "fa-paint-roller",
+      "title": "Web Design",
+      "description": "Crafting visually appealing and user-friendly websites using HTML, CSS, and JavaScript, with a strong focus on responsive design and seamless user experience."
+    },
+    {
+      "icon": "fa-laptop",
+      "title": "Web Development",
+      "description": "Developing robust and dynamic web applications using WordPress, MySQL, PHP, JavaScript, HTML, and CSS, ensuring functionality, performance, and scalability."
+    },
+    {
+      "icon": "fa-globe",
+      "title": "Domain Registration",
+      "description": "I offer quick and hassle-free domain registration services to help you secure the perfect web address for your business."
+    },
+    {
+      "icon": "fa-server",
+      "title": "Web Hosting",
+      "description": "I provide comprehensive web hosting setup and configuration services, ensuring your website is securely installed, optimized for performance, and ready to deliver a seamless user experience."
+    },
+    {
+      "icon": "fa-search",
+      "title": "SEO",
+      "description": "Enhancing website visibility and search engine rankings through keyword optimization, content strategy, and technical SEO best practices."
+    },
+    {
+      "icon": "fa-user-tie",
+      "title": "Virtual Assistant",
+      "description": "Providing efficient administrative support, managing tasks, scheduling, and assisting with projects remotely, ensuring smooth operations and client satisfaction."
     }
   ],
   "contact": {
