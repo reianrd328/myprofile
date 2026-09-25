@@ -92,6 +92,13 @@
       "categoryLabel": "Web Development",
       "image": "images/portfolio/invetory.png",
       "url": "https://technical-preventive-hub.onrender.com/"
+    },
+    {
+      "title": "utilizerhythm.s3-tastewp",
+      "category": "web-dev",
+      "categoryLabel": "Web Development",
+      "image": "images/portfolio/ss-.png",
+      "url": "https://utilizerhythm.s3-tastewp.com/home/"
     }
   ],
   "services": [
