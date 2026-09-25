@@ -25,6 +25,7 @@
         if (data.sidebar.instagram && data.sidebar.instagram !== '#') {
           socialHtml += '<a class="btn" href="' + data.sidebar.instagram + '" target="_blank"><i class="fab fa-instagram"></i></a> ';
         }
+        socialHtml += '<a class="btn" href="admin/" title="Admin Login"><i class="fa fa-lock"></i></a> ';
         if (socialHtml) footerEl.innerHTML = socialHtml;
       }
     }

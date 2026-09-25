@@ -144,5 +144,8 @@
   },
   "footer": {
     "copyright": "© Copyright Ribong. All Rights Reserved"
+  },
+  "admin": {
+    "password": "admin"
   }
 }
